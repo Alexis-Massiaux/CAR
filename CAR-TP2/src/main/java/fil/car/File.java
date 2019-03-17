@@ -63,6 +63,22 @@ public class File {
 			//TODO LOG
 		}
 	}
+	
+	@GET
+	@Path("/rename/{var: .*}")
+	@Produces("text/html")
+	public String renameFile(@PathParam("var") String rename) {
+		String[] split = rename.split("-");
+		String from = split[0], to = split[1];
+		try {
+			Client.getInstance().rename(from, to);
+			return "[SUCCESS] "+from+" has been rename to "+to+" ! ";
+		} catch (IOException e) {
+			return "[FAILED] "+from+" - "+to;
+			//TODO LOG
+		}
+	}
+
 
 	/*
 	public String deletePath(String path) throws IOException {
