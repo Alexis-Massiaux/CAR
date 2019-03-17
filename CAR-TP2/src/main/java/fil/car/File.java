@@ -3,7 +3,10 @@ package fil.car;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -20,10 +23,7 @@ public class File {
 	@Produces("text/html")
 	public String getFileList(@PathParam("var") String directory) throws IOException {
 		Client.connexion();
-		System.out.println(Client.getInstance().printWorkingDirectory());
-		//String path = deletePath(directory);
-		//System.out.println("compile3");
-		//System.out.println(directory);
+
 		try {
 			int cwd = 0; 
 			//int cwd = Client.getInstance().cwd(directory);
@@ -37,7 +37,7 @@ public class File {
 		return "";
 	}
 
-	@GET
+	@POST
 	@Path("/download/{filename}")
 	@Produces("application/octet-stream")
 	public Response getFile(@PathParam("filename") String filename) {
@@ -51,12 +51,15 @@ public class File {
 		}
 	}
 	
-	@GET
+	@DELETE
 	@Path("/delete/{filename}")
 	@Produces("text/html")
 	public String deleteFile(@PathParam("filename") String filename) {
 		try {
-			Client.getInstance().deleteFile(filename);
+			if(isDirectory(filename))
+				Client.getInstance().removeDirectory(filename);
+			else
+				Client.getInstance().deleteFile(filename);
 			return "[SUCCESS] "+filename+" has been deleted ! ";
 		} catch (IOException e) {
 			return "[FAILED] "+filename;
@@ -64,7 +67,8 @@ public class File {
 		}
 	}
 	
-	@GET
+	
+	@POST
 	@Path("/rename/{var: .*}")
 	@Produces("text/html")
 	public String renameFile(@PathParam("var") String rename) {
@@ -74,22 +78,37 @@ public class File {
 			Client.getInstance().rename(from, to);
 			return "[SUCCESS] "+from+" has been rename to "+to+" ! ";
 		} catch (IOException e) {
-			return "[FAILED] "+from+" - "+to;
 			//TODO LOG
 		}
+		return "[FAILED] "+from+" - "+to;
+	}
+	
+	@POST
+	@Path("/mkdir/{directory}")
+	@Produces("text/html")
+	public String createDirectory(@PathParam("directory") String directory) {
+		try {
+			if(Client.getInstance().makeDirectory(directory)) 
+				return "[SUCCESS] "+directory+" has been create ! ";
+		} catch (IOException e) {
+			// TODO LOG
+		}
+		return "[FAILED] "+directory;
 	}
 
-
-	/*
-	public String deletePath(String path) throws IOException {
-		String pwd = Client.getInstance().printWorkingDirectory();
-		int i = 0;
-		while(path.charAt(0) == pwd.charAt(i))
-			i++;
-		return path.substring(i, path.length());
-
+	public boolean isDirectory(String name) {
+		try {
+			FTPFile[] files = Client.getInstance().listFiles();
+			for(int i=0; i<files.length; i++)
+				if(files[i].getName().equals(name) && files[i].isDirectory() )
+					return true;
+		} catch (IOException e) {
+			// TODO LOG
+			return false;
+		}
+		return false;
 	}
-	 */
+
 	public String formatList(FTPFile[] list) {
 		String res = "";
 
