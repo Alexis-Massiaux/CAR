@@ -37,7 +37,7 @@ public class File {
 		return "";
 	}
 
-	@POST
+	@GET
 	@Path("/download/{filename}")
 	@Produces("application/octet-stream")
 	public Response getFile(@PathParam("filename") String filename) {
@@ -51,7 +51,7 @@ public class File {
 		}
 	}
 	
-	@DELETE
+	@GET
 	@Path("/delete/{filename}")
 	@Produces("text/html")
 	public String deleteFile(@PathParam("filename") String filename) {
@@ -68,7 +68,7 @@ public class File {
 	}
 	
 	
-	@POST
+	@GET
 	@Path("/rename/{var: .*}")
 	@Produces("text/html")
 	public String renameFile(@PathParam("var") String rename) {
@@ -83,7 +83,7 @@ public class File {
 		return "[FAILED] "+from+" - "+to;
 	}
 	
-	@POST
+	@GET
 	@Path("/mkdir/{directory}")
 	@Produces("text/html")
 	public String createDirectory(@PathParam("directory") String directory) {
