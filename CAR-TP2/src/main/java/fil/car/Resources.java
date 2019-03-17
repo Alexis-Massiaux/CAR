@@ -1,22 +1,22 @@
 package fil.car;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.net.ftp.FTPFile;
 
 @Path("file")
-public class File {
+public class Resources {
 
 	@GET
 	@Path("/list/{var: .*}")
@@ -94,6 +94,27 @@ public class File {
 			// TODO LOG
 		}
 		return "[FAILED] "+directory;
+	}
+	
+	@GET
+	@Path("/upload/{var: .*}")
+	@Produces("text/html")
+	public String upload(@PathParam("var") String filename) {
+		File file = new File(filename);
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(file);
+		} catch (FileNotFoundException e) {
+			// TODO LOG
+			return "[FAILED] "+filename+" n'existe pas !";
+		}
+		try {
+			Client.getInstance().storeFile(filename, fis);
+			return "[SUCCESS] "+filename;
+		} catch (IOException e) {
+			// TODO LOG
+		}
+		return "[FAILED] "+filename;
 	}
 
 	public boolean isDirectory(String name) {
