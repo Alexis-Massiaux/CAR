@@ -50,6 +50,19 @@ public class File {
 			//TODO LOG
 		}
 	}
+	
+	@GET
+	@Path("/delete/{filename}")
+	@Produces("text/html")
+	public String deleteFile(@PathParam("filename") String filename) {
+		try {
+			Client.getInstance().deleteFile(filename);
+			return "[SUCCESS] "+filename+" has been deleted ! ";
+		} catch (IOException e) {
+			return "[FAILED] "+filename;
+			//TODO LOG
+		}
+	}
 
 	/*
 	public String deletePath(String path) throws IOException {
