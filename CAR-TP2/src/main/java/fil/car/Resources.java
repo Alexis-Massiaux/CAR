@@ -100,7 +100,8 @@ public class Resources {
 	@Path("/upload/{var: .*}")
 	@Produces("text/html")
 	public String upload(@PathParam("var") String filename) {
-		File file = new File(filename);
+		File file = new File("C:\\Utilisateurs\\A694672\\Desktop\\Master\\Cours\\upload.txt");
+		//File file = new File(filename);
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(file);
