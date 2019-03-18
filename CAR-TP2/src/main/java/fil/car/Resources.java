@@ -18,6 +18,12 @@ import org.apache.commons.net.ftp.FTPFile;
 @Path("file")
 public class Resources {
 
+	/**
+	 * Permet d'afficher le contenu du repertoire selectionné
+	 * @param directory chemin du repertoire selectionné
+	 * @return
+	 * @throws IOException
+	 */
 	@GET
 	@Path("/list/{var: .*}")
 	@Produces("text/html")
@@ -25,8 +31,7 @@ public class Resources {
 		Client.connexion();
 
 		try {
-			int cwd = 0; 
-			//int cwd = Client.getInstance().cwd(directory);
+			int cwd = Client.getInstance().cwd(directory);
 			if(cwd == 550)
 				return Client.getInstance().printWorkingDirectory()+directory+" : Chemin introuvable ! ";
 			FTPFile[] fileList = Client.getInstance().listFiles();
@@ -37,6 +42,11 @@ public class Resources {
 		return "";
 	}
 
+	/**
+	 * Permet de télécharger un fichier texte
+	 * @param filename nom du fichier à télécharger
+	 * @return
+	 */
 	@GET
 	@Path("/download/{filename}")
 	@Produces("application/octet-stream")
@@ -51,6 +61,11 @@ public class Resources {
 		}
 	}
 	
+	/**
+	 * Supprime un fichier ou un repertoire
+	 * @param filename nom du fichier ou du repertoire
+	 * @return
+	 */
 	@GET
 	@Path("/delete/{filename}")
 	@Produces("text/html")
@@ -68,6 +83,11 @@ public class Resources {
 	}
 	
 	
+	/**
+	 * Permet de renommer un fichier ou un repertoire
+	 * @param rename {nom du fichier à renomer}-{nouveau nom}
+	 * @return
+	 */
 	@GET
 	@Path("/rename/{var: .*}")
 	@Produces("text/html")
@@ -83,6 +103,11 @@ public class Resources {
 		return "[FAILED] "+from+" - "+to;
 	}
 	
+	/**
+	 * Créer un dossier
+	 * @param directory nom du nouveau repertoire 
+	 * @return
+	 */
 	@GET
 	@Path("/mkdir/{directory}")
 	@Produces("text/html")
@@ -96,6 +121,11 @@ public class Resources {
 		return "[FAILED] "+directory;
 	}
 	
+	/**
+	 * Permet de mettre en ligne un fichier texte
+	 * @param filename chemin du fichier texte
+	 * @return
+	 */
 	@GET
 	@Path("/upload/{var: .*}")
 	@Produces("text/html")
@@ -135,7 +165,7 @@ public class Resources {
 		String res = "";
 
 		for(int i=0; i<list.length; i++) {
-			res+="<p>"+list[i]+"</p>";
+			res+="<p>"+list[i]+"</p>\n";
 		}
 		return res;
 	}
