@@ -1,0 +1,13 @@
+curl http://localhost:8080/car/login/username:pass
+
+- accéder à un répertoire et lister son contenu  	curl http://localhost:8080/car/file/list/
+- télécharger un fichier texte 				curl http://localhost:8080/car/file/download/{FILENAME}
+- télécharger une image
+- télécharger un répertoire complet
+- mettre en ligne un fichier texte			curl http://localhost:8080/car/file/upload/{chemin du fichier}
+- mettre en ligne une image
+- mettre en ligne un répertoire complet
+- renommer un fichier distant				curl http://localhost:8080/car/file/rename/{FROM}-{TO}
+- créer un répertoire distant				curl http://localhost:8080/car/file/mkdir/{FILENAME}
+- renommer un répertoire distant			curl http://localhost:8080/car/file/rename/{FROM}-{TO}
+- supprimer un répertoire distant			curl http://localhost:8080/car/file/delete/{FILENAME}
