@@ -57,7 +57,6 @@ public class Resources {
 			return response;
 		} catch (IOException e) {
 			return null;
-			//TODO LOG
 		}
 	}
 	
@@ -78,7 +77,7 @@ public class Resources {
 			return "[SUCCESS] "+filename+" has been deleted ! ";
 		} catch (IOException e) {
 			return "[FAILED] "+filename;
-			//TODO LOG
+
 		}
 	}
 	
